@@ -336,7 +336,7 @@ getAirportArrivalsSingleInterval <- function(airport, startTime, endTime, timeZo
                                              maxQueryAttempts, credentials = NULL) {
   query<-list(airport=airport, begin=stringToEpochs(startTime,timeZone),end=stringToEpochs(endTime, timeZone))
   response <-makeAuthenticatedRequest("flights/arrival", query, credentials, timeOut, maxQueryAttempts)
-
+  # FIXME catch NULL response if 404 no flights in interval
     arrivalsList <- formatFlightsListResponse(content(response))
     arrivalsOpenSkiesFlights <- lapply(arrivalsList, listToOpenSkiesFlight)
     if(includeStateVectors){
@@ -370,7 +370,7 @@ getAirportDeparturesSingleInterval <- function(airport, startTime, endTime, time
                                                timeOut, maxQueryAttempts, credentials=NULL) {
   query<-list(airport=airport, begin=stringToEpochs(startTime,timeZone),end=stringToEpochs(endTime, timeZone))
   response <-makeAuthenticatedRequest("flights/departure", query, credentials, timeOut, maxQueryAttempts)
-
+  # FIXME catch NULL response if 404 no flights in interval
     departuresList <- formatFlightsListResponse(content(response))
     departuresOpenSkiesFlights <- lapply(departuresList, listToOpenSkiesFlight)
     if(includeStateVectors){
@@ -403,9 +403,9 @@ getAircraftFlightsSingleInterval <- function(aircraft, startTime, endTime, timeZ
                                              timeResolution, useTrino, 
                                              includeAirportsMetadata,
                                              timeOut, maxQueryAttempts, credentials=NULL) {
-  query=list(icao24=aircraft, begin=stringToEpochs(startTime, timeZone), end=stringToEpochs(endTime, timeZone))
+  query<-list(icao24=aircraft, begin=stringToEpochs(startTime, timeZone), end=stringToEpochs(endTime, timeZone))
   response <-makeAuthenticatedRequest("flights/aircraft", query, credentials, timeOut, maxQueryAttempts)
-
+  # FIXME catch NULL response if 404 no flights in interval
     aircraftFlightsList <- formatFlightsListResponse(content(response))
     aircraftOpenSkiesFlights <- lapply(aircraftFlightsList, listToOpenSkiesFlight)
     if(includeStateVectors)
@@ -439,7 +439,7 @@ getIntervalFlightsSingleInterval <- function(startTime, endTime, timeZone,
                                              timeOut, maxQueryAttempts, credentials = NULL) {
   query=list(begin=stringToEpochs(startTime, timeZone), end=stringToEpochs(endTime, timeZone))
   response <-makeAuthenticatedRequest("flights/all", query, credentials, timeOut, maxQueryAttempts)
-
+  # FIXME catch NULL response if 404 no flights in interval
     intervalFlightsList <- formatFlightsListResponse(content(response))
     intervalOpenSkiesFlights <- lapply(intervalFlightsList, listToOpenSkiesFlight)
     if(includeStateVectors){

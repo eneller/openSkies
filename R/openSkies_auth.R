@@ -103,11 +103,12 @@ hasToken <- function(credentials) {
 }
 
 # Abstracted authenticated HTTP request
-makeAuthenticatedRequest <- function(url, query, credentials, timeOut = 60, maxQueryAttempts = 1) {
+makeAuthenticatedRequest <- function(request_url, query, credentials, timeOut = 60, maxQueryAttempts = 1) {
     # If url is just a path, prepend the opensky root URL
-      if (! grepl("^https?://", url)) {
-        request_url <- paste0(openskyApiRootURL, url)
+      if (! grepl("^https?://", request_url)) {
+        request_url <- paste0(openskyApiRootURL, request_url)
       }
+
   jsonResponse <- FALSE
   attemptCount <- 0
   
